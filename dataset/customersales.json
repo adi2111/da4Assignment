@@ -1,0 +1,13 @@
+{
+	"name": "customersales",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlsampledbLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

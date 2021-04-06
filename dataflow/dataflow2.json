@@ -1,0 +1,32 @@
+{
+	"name": "dataflow2",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTable2",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTable3",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Aggregate1"
+				}
+			],
+			"script": "source(output(\n\t\t{customer name} as string,\n\t\t{product name} as string,\n\t\t{Order No} as string,\n\t\tOrderDate as timestamp,\n\t\tLineTotal as decimal(38,6)\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tquery: '\\nSELECT c.FirstName \"customer name\",d.Name \"product name\",a.SalesOrderNumber\"Order No\",a.OrderDate,b.LineTotal   FROM [SalesLT].[SalesOrderHeader] a ,[SalesLT].[SalesOrderDetail] b, [SalesLT].[Customer] c, [SalesLT].[Product] d\\n where c.CustomerID=a.CustomerID AND b.SalesOrderID=a.SalesOrderID AND d.ProductID=b.ProductID',\n\tformat: 'query') ~> source1\nsource1 aggregate(groupBy({customer name}),\n\ttotalsales = sum(LineTotal)) ~> Aggregate1\nAggregate1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+		}
+	}
+}

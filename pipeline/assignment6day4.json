@@ -1,0 +1,53 @@
+{
+	"name": "assignment6day4",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT c.FirstName +' '+c.lastname + ' brought '+ d.Name +' worth RS '+ CAST(b.LineTotal  AS nvarchar )\n FROM [SalesLT].[SalesOrderHeader] a ,[SalesLT].[SalesOrderDetail] b, [SalesLT].[Customer] c, [SalesLT].[Product] d\n where c.CustomerID=a.CustomerID AND b.SalesOrderID=a.SalesOrderID AND d.ProductID=b.ProductID",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "JsonSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						},
+						"formatSettings": {
+							"type": "JsonWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "customersales",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "customerdataasJson2",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2021-04-06T14:24:20Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
