@@ -9,8 +9,8 @@
 		"type": "AzureSqlTable",
 		"schema": [],
 		"typeProperties": {
-			"schema": "dbo.",
-			"table": "totalsalesbycustomer"
+			"schema": "dbo",
+			"table": "SalesCollection"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
