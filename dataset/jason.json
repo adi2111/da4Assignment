@@ -20,7 +20,7 @@
 					"value": "@dataset().filename",
 					"type": "Expression"
 				},
-				"folderPath": "mydata",
+				"folderPath": "assignment3",
 				"container": "output"
 			}
 		},
