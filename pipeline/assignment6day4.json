@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "SELECT c.FirstName +' '+c.lastname + ' brought '+ d.Name +' worth RS '+ CAST(b.LineTotal  AS nvarchar )\n FROM [SalesLT].[SalesOrderHeader] a ,[SalesLT].[SalesOrderDetail] b, [SalesLT].[Customer] c, [SalesLT].[Product] d\n where c.CustomerID=a.CustomerID AND b.SalesOrderID=a.SalesOrderID AND d.ProductID=b.ProductID",
+						"sqlReaderQuery": "SELECT c.FirstName +' '+c.lastname + ' brought '+ d.Name +' from '+c.SalesPerson+' worth RS '+ CAST(b.LineTotal  AS nvarchar )\n FROM [SalesLT].[SalesOrderHeader] a ,[SalesLT].[SalesOrderDetail] b, [SalesLT].[Customer] c, [SalesLT].[Product] d\n where c.CustomerID=a.CustomerID AND b.SalesOrderID=a.SalesOrderID AND d.ProductID=b.ProductID",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -41,7 +41,13 @@
 				"outputs": [
 					{
 						"referenceName": "customerdataasJson2",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"filename3": {
+								"value": "@concat('report ',utcnow())",
+								"type": "Expression"
+							}
+						}
 					}
 				]
 			}

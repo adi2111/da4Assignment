@@ -5,22 +5,12 @@
 			"referenceName": "AzureBlobStorage1",
 			"type": "LinkedServiceReference"
 		},
-		"parameters": {
-			"file2": {
-				"type": "string",
-				"defaultValue": "product800"
-			}
-		},
 		"annotations": [],
 		"type": "Json",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": {
-					"value": "@dataset().file2",
-					"type": "Expression"
-				},
-				"folderPath": "mydata",
+				"folderPath": "assignment3",
 				"container": "output"
 			}
 		},
