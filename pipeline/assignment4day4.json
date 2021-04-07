@@ -61,10 +61,7 @@
 							"typeProperties": {
 								"source": {
 									"type": "SqlServerSource",
-									"sqlReaderQuery": {
-										"value": "   SELECT  [BusinessEntityID]\n      ,[DepartmentID]\n      ,[ShiftID]\n      ,[StartDate]\n      ,[EndDate]\n      ,[ModifiedDate]\n  FROM [AdventureWorks2012].[HumanResources].[EmployeeDepartmentHistory]\n  where DepartmentID=@{item().DepartmentID}",
-										"type": "Expression"
-									},
+									"sqlReaderQuery": "   SELECT  [BusinessEntityID]\n      ,[DepartmentID]\n      ,[ShiftID]\n      ,[StartDate]\n      ,[EndDate]\n      ,[ModifiedDate]\n  FROM [AdventureWorks2012].[HumanResources].[EmployeeDepartmentHistory]\n  where DepartmentID=@{item().DepartmentID}",
 									"queryTimeout": "02:00:00",
 									"partitionOption": "None"
 								},

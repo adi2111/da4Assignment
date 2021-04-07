@@ -2,7 +2,7 @@
 	"name": "sourcehistory",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "OnPremiseSqlServerLS",
+			"referenceName": "neonprimise",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
