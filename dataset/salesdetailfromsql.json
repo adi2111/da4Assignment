@@ -1,0 +1,12 @@
+{
+	"name": "salesdetailfromsql",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlsampledbLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	}
+}

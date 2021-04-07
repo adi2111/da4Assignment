@@ -1,0 +1,121 @@
+{
+	"name": "pipeline1",
+	"properties": {
+		"activities": [
+			{
+				"name": "Lookup1",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT c.FirstName \"customer name\",d.Name \"product name\",a.SalesOrderNumber\"Order No\",a.OrderDate,b.LineTotal, FORMAT(a.OrderDate, 'MMMM') AS Month   FROM [SalesLT].[SalesOrderHeader] a ,[SalesLT].[SalesOrderDetail] b, [SalesLT].[Customer] c, [SalesLT].[Product] d\n where c.CustomerID=a.CustomerID AND b.SalesOrderID=a.SalesOrderID AND d.ProductID=b.ProductID",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "salesOrderDetails",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Lookup1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Lookup1').output.value",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Copy data1",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"sqlReaderQuery": {
+										"value": "\nSELECT c.FirstName \"customer name\",d.Name \"product name\",a.SalesOrderNumber\"Order No\",a.OrderDate,b.LineTotal   FROM [SalesLT].[SalesOrderHeader] a ,[SalesLT].[SalesOrderDetail] b, [SalesLT].[Customer] c, [SalesLT].[Product] d\n where c.CustomerID=a.CustomerID AND b.SalesOrderID=a.SalesOrderID AND d.ProductID=b.ProductID AND a.OrderDate= @{item().OrderDate}",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobStorageWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "salesdetailfromsql",
+									"type": "DatasetReference"
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DelimitedText2",
+									"type": "DatasetReference",
+									"parameters": {
+										"month": {
+											"value": "@item().Month",
+											"type": "Expression"
+										},
+										"filename5": {
+											"value": "@concat('sales report on',item().OrderDate)",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"annotations": []
+	}
+}
