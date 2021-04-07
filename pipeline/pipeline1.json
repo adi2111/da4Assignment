@@ -62,7 +62,7 @@
 								"source": {
 									"type": "AzureSqlSource",
 									"sqlReaderQuery": {
-										"value": "\nSELECT c.FirstName \"customer name\",d.Name \"product name\",a.SalesOrderNumber\"Order No\",a.OrderDate,b.LineTotal   FROM [SalesLT].[SalesOrderHeader] a ,[SalesLT].[SalesOrderDetail] b, [SalesLT].[Customer] c, [SalesLT].[Product] d\n where c.CustomerID=a.CustomerID AND b.SalesOrderID=a.SalesOrderID AND d.ProductID=b.ProductID AND a.OrderDate= @{item().OrderDate}",
+										"value": "SELECT c.FirstName \"customer name\",d.Name \"product name\",a.SalesOrderNumber\"Order No\",a.OrderDate,b.LineTotal, FORMAT(a.OrderDate, 'MMMM') as Month \n  FROM [SalesLT].[SalesOrderHeader] a ,[SalesLT].[SalesOrderDetail] b, [SalesLT].[Customer] c, [SalesLT].[Product] d\n where c.CustomerID=a.CustomerID AND b.SalesOrderID=a.SalesOrderID AND d.ProductID=b.ProductID AND FORMAT(a.OrderDate, 'MMMM')=@{item().Month}",
 										"type": "Expression"
 									},
 									"queryTimeout": "02:00:00",
